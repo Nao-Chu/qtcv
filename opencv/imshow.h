@@ -10,6 +10,7 @@
 #include "morph.h"
 #include "threshold.h"
 #include "blue.h"
+#include "qrcode.h"
 
 using namespace cv;
 
@@ -43,6 +44,8 @@ private:
     Morph *morph;
     Threshold *thresh;
     Blue *bluer;
+    QrCode *scanResult;
+    QrCode *drawQrcode;
 
     bool open_rect;
     bool draw_minRectangle;
@@ -59,6 +62,9 @@ private:
     void ReadMyData();
     void acquireImage(QByteArray ba);
 
+    bool resQr;
+    bool draQr;
+
 private slots:
     void imshow();
     void debug(int value);
@@ -69,6 +75,9 @@ private slots:
     void qmage_format(Mat frame,int model);
     void frame_format(int model);
     void TransformFormat();
+
+    void operation(Mat frame);
+    void resQr_model_operation(Mat frame_clone);
     void hsv_model_operation(bool ifhsv,Mat frame);
 
     void hsvSegmentation();
@@ -147,6 +156,10 @@ private slots:
     void linesp();
     void circles();
     void on_connect_clicked();
+
+    void qr_oper();
+    void resultQr();
+    void drawQr();
 };
 
 #endif // IMSHOW_H

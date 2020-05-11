@@ -64,5 +64,6 @@ void Blue::blue_operation(cv::Mat frame)
 
 void Blue::canny_operation(cv::Mat &frame_canny)
 {
-    cv::Canny(frame_canny,frame_canny,50,50*3,3,false);
+    cv::Mat img = frame_canny.clone();
+    cv::Canny(img,frame_canny,50,50*3,3,false);
 }

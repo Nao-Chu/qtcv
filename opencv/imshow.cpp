@@ -18,6 +18,7 @@ Imshow::Imshow(QWidget *parent) :
     thresh = new Threshold;
     bluer = new Blue;
     tcpsocket = new QTcpSocket(this);
+    scanResult = new ScanResult;
     hsv_model = false;
     click = false;
     hsvvalue = false;
@@ -27,6 +28,8 @@ Imshow::Imshow(QWidget *parent) :
     draw_center = false;
     draw_ellipse = false;
     draw_convexHull = false;
+    resQr = false;
+    draQr = false;
     houghmodel = 0;
     basize = 0;
     imshow();
@@ -36,6 +39,7 @@ Imshow::Imshow(QWidget *parent) :
     threshold_oper();
     blue_oper();
     hough_oper();
+    qr_oper();
 }
 
 Imshow::~Imshow()
@@ -96,7 +100,7 @@ void Imshow::importFrame()
         bluer->blue_operation(frame_clone);
         acquire_point_hsv(frame_clone);
         auto_acquire_hsv_value(hsvvalue,frame_clone);
-        hsv_model_operation(hsv_model,frame_clone); 
+        operation(frame_clone);
         srcQImage = srcQImage.scaled(ui->label->width(),ui->label->height());
         ui->label->setPixmap(QPixmap::fromImage(srcQImage));
         ui->label->show();
@@ -199,6 +203,34 @@ void Imshow::frame_format(int model)
         default:
             break;
     }
+}
+
+void Imshow::operation(Mat frame)
+{
+    if(resQr)
+    {
+        resQr_model_operation(frame);
+    }
+    else
+    {
+        hsv_model_operation(hsv_model,frame);
+    }
+}
+
+void Imshow::resQr_model_operation(Mat frame)
+{
+    Mat frame_clone = frame.clone();
+    cv::resize(frame_clone,frame_clone,Size(320,240));
+    cv::Point draw_po = cv::Point(30,30);
+    cv::Scalar color = cv::Scalar(25,143,145);
+    scanResult->ScanQrCode(frame_clone);
+    cv::putText(frame_clone,scanResult->m_scanResult,draw_po,cv::FONT_HERSHEY_PLAIN,1,color,1,2,0);
+    if(draQr)
+    {
+        QrCode *drawQrcode = new DrawQrCode(scanResult->m_lineList);
+        drawQrcode->ScanQrCode(frame_clone);
+    }
+    qmage_format(frame_clone,model);
 }
 
 /*
@@ -314,7 +346,6 @@ void Imshow::hsv_model_operation(bool ifhsv,Mat frame)
 
     }
     rect(frame_clone);
-    //cv::imshow("2",frame_clone);
     cv::waitKey(1);
     qmage_format(frame_clone,model);
 }
@@ -424,6 +455,7 @@ void Imshow::rect(Mat& frame_clone)
         }
     }
 }
+
 /*
  * ************************** *
  *                            *
@@ -904,6 +936,7 @@ void Imshow::acquire_gausizey(int value)
 void Imshow::switch_canny()
 {
     bluer->ifcanny ? bluer->ifcanny = false : bluer->ifcanny = true;
+    if(bluer->ifcanny && hsv_model) hsv_model = false;
 }
 
 /*
@@ -988,4 +1021,29 @@ void Imshow::acquireImage(QByteArray ba)
     Mat acimage = cv::Mat(image.height(), image.width(), CV_8UC4,
             (void*)image.constBits(), image.bytesPerLine());
     frame = acimage.clone();
+}
+
+/*
+ * ***************** *
+ *                   *
+ *  Qr Code connect  *
+ *                   *
+ * ***************** *
+ */
+void Imshow::qr_oper()
+{
+    ui->drawQrcode->setEnabled(false);
+    connect(ui->resultQrcode,SIGNAL(clicked()),this,SLOT(resultQr()));
+    connect(ui->drawQrcode,SIGNAL(clicked()),this,SLOT(drawQr()));
+}
+
+void Imshow::resultQr()
+{
+    resQr ? resQr = false : resQr = true;
+    ui->drawQrcode->setEnabled(resQr);
+}
+
+void Imshow::drawQr()
+{
+    draQr ? draQr = false : draQr = true;
 }

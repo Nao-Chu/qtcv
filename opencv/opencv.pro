@@ -23,13 +23,15 @@ SOURCES += main.cpp\
     hsvsegmentation.cpp \
     morph.cpp \
     threshold.cpp \
-    blue.cpp
+    blue.cpp \
+    qrcode.cpp
 
 HEADERS  += imshow.h \
     hsvsegmentation.h \
     morph.h \
     threshold.h \
-    blue.h
+    blue.h \
+    qrcode.h
 
 FORMS    += imshow.ui
 

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'imshow.ui'
 **
-** Created: Thu Feb 20 22:25:15 2020
+** Created: Fri May 8 23:09:37 2020
 **      by: Qt User Interface Compiler version 5.0.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -151,6 +151,8 @@ public:
     QLabel *label_18;
     QLineEdit *lineEditIp;
     QPushButton *connect;
+    QPushButton *resultQrcode;
+    QPushButton *drawQrcode;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
     QMenu *menuOpen;
@@ -660,6 +662,12 @@ public:
 
         gridLayout_6->addWidget(connect, 1, 0, 1, 2);
 
+        resultQrcode = new QPushButton(centralWidget);
+        resultQrcode->setObjectName(QStringLiteral("resultQrcode"));
+        resultQrcode->setGeometry(QRect(660, 350, 151, 27));
+        drawQrcode = new QPushButton(centralWidget);
+        drawQrcode->setObjectName(QStringLiteral("drawQrcode"));
+        drawQrcode->setGeometry(QRect(660, 380, 151, 27));
         Imshow->setCentralWidget(centralWidget);
         statusBar = new QStatusBar(Imshow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -797,6 +805,8 @@ public:
         label_18->setText(QApplication::translate("Imshow", "ip :", 0));
         lineEditIp->setText(QApplication::translate("Imshow", "192.168.1.1", 0));
         connect->setText(QApplication::translate("Imshow", "connect", 0));
+        resultQrcode->setText(QApplication::translate("Imshow", "resultQrCode", 0));
+        drawQrcode->setText(QApplication::translate("Imshow", "drawQrCode", 0));
         menuOpen->setTitle(QApplication::translate("Imshow", "open", 0));
         Rect->setTitle(QApplication::translate("Imshow", "drawtarget", 0));
         menuThreshold->setTitle(QApplication::translate("Imshow", "threshold", 0));
